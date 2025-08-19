@@ -3,14 +3,18 @@ import { Rocket, Pencil, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import EditModal from "../components/EditModal";
+
 const Homepage = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [editingProduct, setEditingProduct] = useState<any | null>(null);
 
+  // Backend URL from environment variable
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+
   // Fetch products
   const fetchProducts = async () => {
     try {
-      const res = await fetch("http://localhost:4000/api/v1/products");
+      const res = await fetch(`${API_URL}/api/v1/products`);
       const data = await res.json();
       setProducts(data.procuts || []); // ✅ fixed typo
     } catch (error) {
@@ -25,7 +29,7 @@ const Homepage = () => {
   // Delete product
   const handleDelete = async (id: string) => {
     try {
-      await fetch(`http://localhost:4000/api/v1/products/${id}`, {
+      await fetch(`${API_URL}/api/v1/products/${id}`, {
         method: "DELETE",
       });
       setProducts((prev) => prev.filter((p) => p._id !== id));

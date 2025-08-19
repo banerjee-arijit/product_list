@@ -8,6 +8,9 @@ const CreateProductPage = () => {
     imageURL: "",
   });
 
+  // Backend URL from environment variable
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setProductDetails({
       ...productDetails,
@@ -18,11 +21,12 @@ const CreateProductPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:4000/api/v1/products", {
+      const res = await fetch(`${API_URL}/api/v1/products`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(productDetails),
       });
+
       const data = await res.json();
       console.log("Created:", data);
       setProductDetails({ name: "", price: "", imageURL: "" });
@@ -32,7 +36,7 @@ const CreateProductPage = () => {
   };
 
   return (
-    <div className="flex justify-center  flex-col items-center min-h-screen">
+    <div className="flex justify-center flex-col items-center min-h-screen">
       <form
         onSubmit={handleSubmit}
         className="bg-sky-900/10 rounded-xl shadow-lg p-8 max-w-lg w-full"
@@ -42,7 +46,7 @@ const CreateProductPage = () => {
         </h2>
 
         <div className="mb-4">
-          <label htmlFor="name" className={`block  font-medium mb-1`}>
+          <label htmlFor="name" className="block font-medium mb-1">
             Product Name
           </label>
           <input
@@ -58,10 +62,7 @@ const CreateProductPage = () => {
         </div>
 
         <div className="mb-4">
-          <label
-            htmlFor="price"
-            className="block text-gray-700 font-medium mb-1"
-          >
+          <label htmlFor="price" className="block font-medium mb-1">
             Price
           </label>
           <input
@@ -77,10 +78,7 @@ const CreateProductPage = () => {
         </div>
 
         <div className="mb-6">
-          <label
-            htmlFor="imageURL"
-            className="block text-gray-700 font-medium mb-1"
-          >
+          <label htmlFor="imageURL" className="block font-medium mb-1">
             Image URL
           </label>
           <input

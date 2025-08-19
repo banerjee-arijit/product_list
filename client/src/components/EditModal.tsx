@@ -15,6 +15,9 @@ const EditModal = ({ product, onClose, onUpdated }: EditModalProps) => {
   });
   const [loading, setLoading] = useState(false);
 
+  // Backend URL from environment variable
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -22,7 +25,7 @@ const EditModal = ({ product, onClose, onUpdated }: EditModalProps) => {
   const handleSave = async () => {
     setLoading(true);
     try {
-      await fetch(`http://localhost:4000/api/v1/products/${product._id}`, {
+      await fetch(`${API_URL}/api/v1/products/${product._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
