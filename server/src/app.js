@@ -4,19 +4,23 @@ import path from "path";
 import router from "./routes/products.route.js";
 
 const app = express();
-const __dirname = path.resolve();
+const allowedOrigins = [
+  "http://localhost:5173", // dev
+  "https://product-list-frontend-vndv.onrender.com",
+];
 
-// Middleware
-// Only enable CORS in development
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      callback(new Error("Not allowed by CORS"));
+    },
     methods: ["POST", "GET", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type"],
     credentials: true,
   })
 );
-
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true }));
 
